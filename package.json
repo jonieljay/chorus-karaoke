@@ -1,6 +1,6 @@
 {
   "name": "chorus-karaoke",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Self-hosted QR-powered YouTube karaoke party with real-time song queue",
   "private": true,
   "license": "MIT",

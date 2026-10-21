@@ -1,0 +1,164 @@
+/* Chorus Karaoke V2: compact thumbnail search inspired by a phone song remote */
+.search-panel-v2 {padding:24px}
+.search-panel-v2 [hidden] {display:none!important}
+.browser-intro {display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:20px}
+.browser-intro h2 {font:800 23px/1.2 var(--font-display);letter-spacing:-.7px;margin:0}
+.browser-intro h2 span {color:#cf98ff;font-size:18px}
+.browser-intro p {color:#a8a0bb;font-size:12px;margin:5px 0 0}
+.browser-youtube {border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:7px 10px;display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:800;color:#d9c5f9;white-space:nowrap}
+.browser-tabs {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:#292436;border-radius:14px;padding:5px;margin-bottom:15px}
+.browser-tabs button {border:0;color:#b8adc8;background:transparent;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 6px;font-size:12px;font-weight:800;min-width:0;white-space:nowrap;transition:background .18s,color .18s}
+.browser-tabs button.active {color:#4b2778;background:#f9f5ff;box-shadow:0 3px 9px rgba(0,0,0,.18)}
+.browser-tabs button:not(.active):hover {color:white;background:rgba(255,255,255,.06)}
+.browser-tabs button.active .icon {color:#9148f2}
+.browser-tabs button small:not(:empty) {min-width:15px;border-radius:100%;background:#bc82fb;color:#1e1234;font-size:9px;padding:1px 4px}
+.browser-search-box {border:1.5px solid #9167ed;background:#151024;box-shadow:0 0 0 4px rgba(156,97,247,.1);border-radius:16px;height:56px}
+.browser-search-box:focus-within {border-color:#ce9cff;box-shadow:0 0 0 4px rgba(164,108,255,.17)}
+.browser-search-box >svg {color:#b685fa;width:21px;height:21px}
+.browser-search-box input {height:100%;font-size:14px;font-weight:500}
+.browser-search-box input::placeholder {color:#8e859f}
+.browser-search-box input::-webkit-search-cancel-button {display:none}
+.browser-search-box .browser-clear {background:transparent;border:0;color:#9d8da9;padding:6px;display:grid;place-items:center}
+.browser-search-box .search-button {border-radius:10px;background:#9d68ef;color:#fff;height:36px}
+.browser-chips {margin-top:12px}
+.browser-chips span {font-size:10px;font-weight:800;letter-spacing:.7px}
+.browser-chips .topic-chip {font-weight:700}
+.browser-list-heading {display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:24px;margin-bottom:9px}
+.browser-list-heading div {min-width:0}
+.browser-list-heading strong {display:block;font-size:13px;color:#f0e9ff}
+.browser-list-heading span {display:block;color:#9389a8;font-size:10px;margin-top:2px}
+.browser-list-heading >small {flex:none;color:#b4a5c3;font-size:10px}
+.browser-results {gap:0;max-height:560px;margin-top:0}
+.music-result {display:flex;align-items:center;gap:14px;min-height:103px;padding:13px 1px;border-bottom:1px solid rgba(255,255,255,.075)}
+.music-result:last-child {border-bottom:0}
+.music-cover {width:68px;height:68px;position:relative;flex:none;border-radius:12px;background:#433558;overflow:hidden}
+.music-cover img {height:100%;width:100%;object-fit:cover}
+.music-video-badge {position:absolute;right:3px;bottom:3px;color:#fff;background:rgba(20,18,29,.8);border-radius:6px;padding:3px;display:flex}
+.music-video-badge svg {width:11px;height:11px}
+.music-meta {flex:1;min-width:0}
+.music-meta strong {color:#f1ebfb;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:14px;font-weight:800;line-height:1.38}
+.music-artist {color:#aaa1bd;display:block;font-size:12px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.music-source {display:flex;align-items:center;gap:3px;color:#7f7599;font-size:10px;margin-top:3px}
+.music-source svg {height:11px;width:11px}
+.music-actions {display:flex;flex:none;flex-direction:column;align-items:center;gap:6px}
+.music-actions button {display:grid;place-items:center;height:37px;width:37px;padding:0;border:0;border-radius:100%;transition:transform .16s,background .16s}
+.music-actions button:hover:not(:disabled) {transform:scale(1.08)}
+.music-actions button svg {height:19px;width:19px}
+.music-add {background:#e9d8ff;color:#983df2}
+.music-add.is-queued {background:#dcfaee;color:#258963}
+.music-save {background:#30273f;color:#9b8eae}
+.music-save.is-saved {background:#513a70;color:#e1beff}
+.music-empty {display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;min-height:165px;padding:20px 15px;color:#aa9dba;border:1px dashed rgba(255,255,255,.12);border-radius:14px;font-size:12px}
+.music-empty .icon.big {width:28px;height:28px;margin:5px 0;color:#ba90ec}
+.music-empty strong {color:#f2eafa;font-size:15px}
+.music-empty p {margin:0;max-width:360px;font-size:12px;line-height:1.65}
+.music-empty .spinner {display:inline-block}
+.music-empty code {font-weight:800;color:#d2a0fc;word-break:break-all}
+.music-empty a.music-external {background:#b17af5;color:#251531;padding:9px 12px;border-radius:10px;font-weight:800;display:inline-flex;gap:5px;align-items:center;margin:5px 0}
+.music-empty small {font-size:11px;color:#9889a7}
+.browser-paste {margin-top:14px;padding-top:16px}
+.browser-paste .field {background:#211930}
+
+/* Guest phone only: the reference's bright, compact, mobile-friendly remote. */
+body.chorus-remote-v2 {color-scheme:light;background:#f8f9fc;color:#20233c}
+body.chorus-remote-v2:before {display:none}
+.chorus-remote-v2 .site-bg {display:none}
+.chorus-remote-v2 .room-nav {border-bottom-color:#eeeff4}
+.chorus-remote-v2 .brand {color:#25243a}
+.chorus-remote-v2 .room-titlebar h1 {color:#26263c}
+.chorus-remote-v2 .room-titlebar p {color:#85869a}
+.chorus-remote-v2 .room-eyebrow {color:#9956e0}
+.chorus-remote-v2 .room-eyebrow i {background:#a669f0}
+.chorus-remote-v2 .guest-welcome {background:#fff;border:1px solid #ecedf4;box-shadow:0 6px 28px rgba(52,44,95,.05)}
+.chorus-remote-v2 .guest-welcome h2 {color:#26263e}
+.chorus-remote-v2 .guest-welcome p {color:#82839d}
+.chorus-remote-v2 .panel {background:#fff;border:1px solid #eeeff5;box-shadow:0 9px 28px rgba(46,41,80,.035)}
+.chorus-remote-v2 .panel-header h2 {color:#292943}
+.chorus-remote-v2 .panel-header small {color:#9494aa}
+.chorus-remote-v2 .panel p {color:#84869b}
+.chorus-remote-v2 .search-panel-v2 {background:#fff}
+.chorus-remote-v2 .browser-intro h2 {color:#2a2943}
+.chorus-remote-v2 .browser-intro p {color:#9090a4}
+.chorus-remote-v2 .browser-youtube {color:#9c66d9;border-color:#eadbf7}
+.chorus-remote-v2 .browser-tabs {background:#f0f1f6}
+.chorus-remote-v2 .browser-tabs button {color:#727e99}
+.chorus-remote-v2 .browser-tabs button:not(.active):hover {color:#7b35db;background:#eae3f3}
+.chorus-remote-v2 .browser-tabs button.active {background:#fff;color:#993df0;box-shadow:0 1px 6px rgba(54,48,86,.12)}
+.chorus-remote-v2 .browser-search-box {background:#faf9ff;border-color:#ce9cff;box-shadow:0 0 0 4px #f5ecff}
+.chorus-remote-v2 .browser-search-box input {color:#32384f}
+.chorus-remote-v2 .browser-search-box input::placeholder {color:#9da4b4}
+.chorus-remote-v2 .browser-search-box .search-button {background:#a25cf4}
+.chorus-remote-v2 .browser-chips .topic-chip {border-color:#e9eaf1;background:#f5f5f8;color:#818098}
+.chorus-remote-v2 .browser-chips .topic-chip:hover {background:#ebddfc;color:#783dc8}
+.chorus-remote-v2 .browser-list-heading strong {color:#3a3655}
+.chorus-remote-v2 .browser-list-heading span,.chorus-remote-v2 .browser-list-heading small {color:#9b9cad}
+.chorus-remote-v2 .music-result {border-bottom-color:#f1f2f6}
+.chorus-remote-v2 .music-meta strong {color:#252a45}
+.chorus-remote-v2 .music-artist {color:#848da6}
+.chorus-remote-v2 .music-source {color:#a5acba}
+.chorus-remote-v2 .music-cover {background:#e9e7ee}
+.chorus-remote-v2 .music-add {background:#f2e4ff;color:#a548ed}
+.chorus-remote-v2 .music-add.is-queued {background:#def7ee;color:#2e9570}
+.chorus-remote-v2 .music-save {background:#f1f3f9;color:#8292b0}
+.chorus-remote-v2 .music-save.is-saved {background:#efe1ff;color:#8c42d5}
+.chorus-remote-v2 .music-empty {background:#faf9fd;color:#85869d;border-color:#e9e4f3}
+.chorus-remote-v2 .music-empty strong {color:#383451}
+.chorus-remote-v2 .music-empty code {color:#7842b5}
+.chorus-remote-v2 .music-empty small {color:#87839b}
+.chorus-remote-v2 .browser-paste {border-color:#ebedf2}
+.chorus-remote-v2 .browser-paste .field {background:#f7f7fb;color:#292e45;border:1px solid #e5e5f1}
+.chorus-remote-v2 .browser-paste .field::placeholder {color:#a4a7b7}
+.chorus-remote-v2 .browser-paste .btn {background:#f1e4ff;color:#8546cf}
+.chorus-remote-v2 .search-footnote {color:#8d91a3}
+.chorus-remote-v2 .queue-panel {color:#27263b}
+.chorus-remote-v2 .queue-row {border-bottom-color:#ebeaf1}
+.chorus-remote-v2 .queue-text strong,.chorus-remote-v2 .queue-empty strong {color:#33334b}
+.chorus-remote-v2 .queue-text small,.chorus-remote-v2 .queue-hint {color:#9193a4}
+.chorus-remote-v2 .queue-empty {color:#8d8da5}
+.chorus-remote-v2 .queue-tools button {color:#828297}
+.chorus-remote-v2 .queue-counter {color:#8744c2;background:#f0e4ff}
+.chorus-remote-v2 .panel .btn-dark {background:#f0e5fc;color:#763daf}
+.chorus-remote-v2 .guest-current strong {color:#32334e}
+.chorus-remote-v2 .guest-current.empty {color:#828398}
+.chorus-remote-v2 .reaction-panel .react-button {background:#f5f1fa;border-color:#e9e4ef}
+.chorus-remote-v2 .react-count {color:#82879b}
+.chorus-remote-v2 .guest-info button {color:#9a5ac6}
+.chorus-remote-v2 .code-chip {background:#f3f0fa;color:#6c4a8c;border-color:#e8e2f0}
+.chorus-remote-v2 .code-chip span {color:#9590a7}
+.chorus-remote-v2 .online {color:#8887a1}
+@media(max-width:800px) {
+  .chorus-remote-v2 .room-grid.guest-grid {grid-template-columns:1fr}
+  .chorus-remote-v2 .room-left {gap:0}
+  .chorus-remote-v2 .room-titlebar,.chorus-remote-v2 .guest-welcome {display:none}
+  .chorus-remote-v2 .room-content {padding:12px 0 60px}
+}
+@media(max-width:590px) {
+  .search-panel-v2 {padding:17px}
+  .browser-intro {display:none}
+  .browser-tabs {margin-bottom:20px;gap:3px}
+  .browser-tabs button {font-size:12px;padding:13px 4px;gap:6px}
+  .browser-tabs button svg {width:14px;height:14px}
+  .browser-chips {margin-top:15px}
+  .browser-chips span {display:none}
+  .browser-search-box {height:58px}
+  .browser-search-box .search-button {display:none}
+  .browser-list-heading {margin-top:21px}
+  .browser-list-heading strong {font-size:12px}
+  .browser-results {max-height:none;overflow:visible}
+  .music-result {gap:12px;min-height:104px;padding:13px 0}
+  .music-cover {width:64px;height:64px;border-radius:10px}
+  .music-meta strong {font-size:14px}
+  .music-artist {font-size:12px}
+  .music-source {display:none}
+  .music-actions {gap:7px}
+  .music-actions button {width:38px;height:38px}
+  .chorus-remote-v2 .container.room-root {width:calc(100% - 28px)}
+  .chorus-remote-v2 .room-nav {height:62px;margin-bottom:3px}
+  .chorus-remote-v2 .room-nav .brand {font-size:22px}
+  .chorus-remote-v2 .room-nav-actions {margin-left:auto}
+  .chorus-remote-v2 .room-nav-actions .btn {padding:7px;border-radius:9px}
+  .chorus-remote-v2 .search-panel-v2 {border:0;box-shadow:none;padding:5px 0 17px}
+  .chorus-remote-v2 .room-content {padding:7px 0 55px}
+  .chorus-remote-v2 .room-grid.guest-grid {gap:20px}
+  .chorus-remote-v2 .browser-tabs {margin-top:3px}
+}

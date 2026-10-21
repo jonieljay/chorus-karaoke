@@ -1,5 +1,7 @@
 # Chorus Karaoke
 
+**Version 1.1 — New phone music browser:** The remote now has Playlist, Search, and Hit Chart tabs, a lightweight song list with YouTube thumbnails/channel names, one-tap queue buttons, and locally saved favorites. Hit Chart contains popular karaoke **search suggestions**, not official YouTube chart rankings.
+
 A complete, self-hosted karaoke website inspired by the "one host screen, everyone's phone is a remote" party flow. Chorus has its own name, visual design, source code, and branding.
 
 **Important:** This is a working first version, not a hosted public website. You need to run it on your own computer/server. YouTube videos play inside the official YouTube embedded player on the host screen; the site does not download YouTube content, extract audio, or manufacture synchronized lyrics or scores.
@@ -45,7 +47,7 @@ Open `http://localhost:3000` in your browser. The terminal also prints the local
 
 ## Optional: search songs within the website
 
-Without configuration, the **paste-link flow already works**. To enable direct keyword search results inside Chorus:
+Without configuration, the **paste-link flow already works**. To enable direct keyword search results inside Chorus (required for the new Search and Hit Chart tabs):
 
 1. In [Google Cloud Console](https://console.cloud.google.com/), create a project.
 2. Enable **YouTube Data API v3** for that project.
@@ -54,7 +56,7 @@ Without configuration, the **paste-link flow already works**. To enable direct k
 5. Edit `.env`, and set `YOUTUBE_API_KEY=YOUR_ACTUAL_API_KEY` (do not add spaces around `=`).
 6. Restart the Node server. Search inside Chorus will now show embeddable YouTube video results.
 
-Keep your API key private. It stays on the server and is not sent to browsers. Search consumes API quota. Configure API restrictions and billing/quota alerts suitable for your deployment. The app caches repeated searches for five minutes, and rate-limits users.
+Keep your API key private. It stays on the server and is not sent to browsers. **On Render:** open your Web Service → Environment → Add Environment Variable, use key `YOUTUBE_API_KEY` and your Google Cloud key as the value, save and redeploy. Do not place the key in GitHub or a browser script. Search consumes API quota. Configure API restrictions and billing/quota alerts suitable for your deployment. The app caches repeated searches for five minutes, and rate-limits users. Playlist favorites are stored in each phone's browser (localStorage) and do not sync across phones; the live party queue does sync across devices.
 
 ## Put your karaoke website online
 

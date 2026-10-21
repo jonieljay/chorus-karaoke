@@ -481,5 +481,11 @@ async function openRoom(code) {
   }
 }
 const roomMatch = location.pathname.match(/^\/room\/([A-Z2-9]{6})\/?$/i);
-if (roomMatch) openRoom(roomMatch[1].toUpperCase());
-else home();
+if (roomMatch) {
+  // Load the remote song-browser enhancement before creating the room interface.
+  const songBrowser = document.createElement('script');
+  songBrowser.src = '/chorus-search-v2.js?v=1.1.0';
+  songBrowser.onload = () => openRoom(roomMatch[1].toUpperCase());
+  songBrowser.onerror = () => openRoom(roomMatch[1].toUpperCase());
+  document.head.appendChild(songBrowser);
+} else home();
