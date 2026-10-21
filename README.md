@@ -142,3 +142,13 @@ chorus-karaoke/
 ## Open-source notice
 
 The bundled QR code generator is derived from the MIT-licensed "QRCode for JavaScript" by Kazuhiko Arase and the Apache-2.0-licensed qrcode-terminal distribution by Gord Tanner et al. Their copyright headers and the original package license are retained in `vendor/`. All original Chorus code is distributed under the MIT license in `LICENSE`.
+
+## v1.2 - Clean YouTube player and live TV reactions
+
+- The built-in YouTube playback bar, Settings gear, and fullscreen control are hidden using the supported iframe parameters `controls=0` and `fs=0`. Karaoke playback is still managed by the existing Chorus host controls below the video.
+- Phone guests can send live reaction emojis that animate in a dedicated **Live Hype** strip immediately to the right of the host's karaoke video, including when the host puts the stage into fullscreen mode. The guest's name appears briefly with the reaction.
+- The reaction strip is outside the YouTube video iframe to keep captions, lyrics, and official player content unobstructed. YouTube's embedded-player rules prohibit overlays on the player itself.
+- The server continues to broadcast both the reaction event and the updated cheer counter to connected room members.
+
+After pushing this version to GitHub, Render should redeploy when automatic deployment is enabled. Refresh the host tab to load the new layout; phones may also need a page refresh.
+
