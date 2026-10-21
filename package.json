@@ -1,0 +1,13 @@
+{
+  "name": "chorus-karaoke",
+  "version": "1.0.0",
+  "description": "Self-hosted QR-powered YouTube karaoke party with real-time song queue",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test tests/*.test.js"
+  }
+}
