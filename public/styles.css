@@ -172,8 +172,9 @@ button svg,a svg {vertical-align:middle}
 .panel-header .icon {color:#bb91ef}
 .panel-header small {font-size:11px;color:var(--muted)}
 .stage-panel {padding:14px}
-.stage-player {aspect-ratio:16/9;overflow:hidden;background:radial-gradient(circle at 50% 84%,rgba(158,68,153,.26),transparent 50%),linear-gradient(155deg,#332342,#100e1b 74%);border-radius:14px;position:relative}
+.stage-player {display:flex;align-items:stretch;overflow:hidden;background:radial-gradient(circle at 50% 84%,rgba(158,68,153,.26),transparent 50%),linear-gradient(155deg,#332342,#100e1b 74%);border-radius:14px;position:relative}
 .stage-player.active {background:#08080b}
+.video-surface {position:relative;flex:1 1 0;min-width:0;aspect-ratio:16/9;overflow:hidden}
 #youtube-container {position:absolute;inset:0;z-index:2;opacity:0;pointer-events:none}
 .stage-player.active #youtube-container {opacity:1;pointer-events:auto}
 #youtube-container iframe {width:100%!important;height:100%!important;display:block}
@@ -262,9 +263,17 @@ button svg,a svg {vertical-align:middle}
 .react-button {display:grid;place-items:center;height:39px;border:1px solid rgba(255,255,255,.09);background:#2b2340;border-radius:10px;font-size:19px;transition:transform .18s,background .18s}
 .react-button:hover {background:#3c2d52;transform:translateY(-3px)}
 .react-count {font-size:10px;text-align:center;color:#9084a5;margin:12px 0 0}
-.reactions-layer {position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:4}
-.flying-emoji {position:absolute;bottom:10%;font-size:35px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.3));animation:emoji-rise 3s ease-out forwards}
-@keyframes emoji-rise {0%{opacity:0;transform:translateY(10px) scale(.75) rotate(-15deg)}15%{opacity:1}85%{opacity:1}100%{opacity:0;transform:translateY(-250px) scale(1.55) rotate(15deg)}}
+.reactions-rail {position:relative;flex:0 0 clamp(72px,12%,108px);overflow:hidden;pointer-events:none;isolation:isolate;border-left:1px solid rgba(235,190,255,.18);background:radial-gradient(circle at 65% 82%,rgba(231,93,187,.21),transparent 65%),linear-gradient(180deg,#2d1f43,#171022 86%)}
+.reactions-rail-title {position:absolute;top:13px;left:0;right:0;text-align:center;font-size:9px;font-weight:900;letter-spacing:1.8px;color:#e6b9ff;text-shadow:0 2px 12px rgba(202,125,255,.5)}
+.reactions-rail-spark {position:absolute;bottom:11px;left:0;right:0;text-align:center;font-size:20px;opacity:.6}
+.flying-emoji {position:absolute;bottom:10%;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:45px;max-width:80%;pointer-events:none;animation:emoji-rise 3.2s ease-out forwards;will-change:transform,opacity;filter:drop-shadow(0 4px 9px rgba(0,0,0,.45))}
+.flying-emoji-symbol {font-size:clamp(24px,2.7vw,37px);line-height:1.1}
+.flying-emoji-sender {color:#fff8ff;text-align:center;text-shadow:0 2px 7px #100a18;font-size:9px;font-weight:900;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+@keyframes emoji-rise {0%{opacity:0;transform:translate3d(0,10px,0) scale(.7) rotate(-14deg)}12%{opacity:1}78%{opacity:1}100%{opacity:0;transform:translate3d(var(--emoji-drift,0px),calc(-1 * var(--emoji-travel,220px)),0) scale(1.3) rotate(12deg)}}
+.stage-player:fullscreen {width:100vw;height:100vh;border-radius:0;background:#08080b}
+.stage-player:fullscreen .video-surface {aspect-ratio:auto}
+.stage-player:fullscreen .reactions-rail {flex-basis:clamp(92px,8vw,156px)}
+.stage-player:fullscreen .flying-emoji-symbol {font-size:clamp(36px,3.6vw,66px)}
 .guest-welcome {display:flex;align-items:center;gap:19px;background:radial-gradient(ellipse at right,rgba(159,80,178,.22),transparent 60%),linear-gradient(120deg,#29203f,#1b172a);border:1px solid rgba(233,157,217,.13);border-radius:20px;padding:25px}
 .guest-icon {display:grid;place-items:center;width:59px;height:59px;border-radius:17px;color:#ffc5de;background:linear-gradient(130deg,#844368,#493373)}
 .guest-icon svg {width:27px;height:27px}

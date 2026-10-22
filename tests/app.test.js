@@ -111,3 +111,48 @@ test('A connected phone receives live room state updates over SSE', async t => {
   controller.abort();
   try { await reader.cancel(); } catch (_) {}
 });
+
+
+test('The host player hides YouTube controls and keeps the live reaction rail outside the video', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const app = fs.readFileSync(path.join(__dirname, '../public/app.js'), 'utf8');
+  const css = fs.readFileSync(path.join(__dirname, '../public/styles.css'), 'utf8');
+  assert.match(app, /playerVars: \{ autoplay: 0, controls: 0, fs: 0,/);
+  assert.match(app, /<div class="video-surface"><div id="youtube-container">/);
+  assert.match(app, /class="reactions-rail" id="reactions-layer"/);
+  assert.match(css, /\.reactions-rail \{position:relative;/);
+  assert.doesNotMatch(css, /\.reactions-layer \{position:absolute;inset:0;/);
+});
+
+test('Guest reactions are broadcast immediately to the host along with the updated count', async t => {
+  const base = await start(t);
+  const created = await call(base, '/api/rooms', { method: 'POST', body: { name: 'Live Reactions Test' } });
+  const code = created.result.code;
+  const controller = new AbortController();
+  const stream = await fetch(`${base}/api/rooms/${code}/events`, { signal: controller.signal });
+  assert.equal(stream.status, 200);
+  const reader = stream.body.getReader();
+  await reader.read(); // initial SSE comment
+  const joined = await call(base, `/api/rooms/${code}/join`, { method: 'POST', body: { name: 'Live Guest' } });
+  const posted = await call(base, `/api/rooms/${code}/reactions`, {
+    method: 'POST', headers: { 'x-guest-token': joined.result.guestToken }, body: { type: 'fire' }
+  });
+  assert.equal(posted.status, 200);
+  let events = '';
+  for (let i = 0; i < 6; i++) {
+    const chunk = await Promise.race([
+      reader.read(),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('Reaction SSE timed out')), 1800))
+    ]);
+    events += new TextDecoder().decode(chunk.value || new Uint8Array());
+    if (events.includes('event: reaction') && events.includes('"reactions":1')) break;
+  }
+  assert.match(events, /event: reaction/);
+  assert.match(events, /"type":"fire"/);
+  assert.match(events, /"name":"Live Guest"/);
+  assert.match(events, /event: state/);
+  assert.match(events, /"reactions":1/);
+  controller.abort();
+  try { await reader.cancel(); } catch (_) {}
+});

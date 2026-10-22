@@ -192,7 +192,7 @@ function renderRoomShell() {
   app.innerHTML = `<div class="site-bg"></div><div class="container room-root">${roomNavigation()}
     <main class="room-content"><div class="room-titlebar"><div><div class="room-eyebrow"><i></i>${isHost ? 'HOST DASHBOARD' : 'YOUR PARTY REMOTE'}</div><h1>${isHost ? 'Your stage is ready.' : `Hey, ${escapeHTML(state.name)}!`}</h1><p>${isHost ? 'Own the spotlight. Your friends handle the song requests.' : `You're connected to ${escapeHTML(state.room.name)}. Pick your next hit!`}</p></div>${isHost ? `<div class="guest-info"><button data-action="lock" id="lock-top">${icon('unlock','small')} Lock queue</button></div>` : `<div class="guest-info"><span class="live-badge">CONNECTED</span></div>`}</div>
     <div class="room-grid ${isHost ? '' : 'guest-grid'}"><div class="room-left">
-      ${isHost ? `<section class="panel stage-panel"><div class="stage-player" id="stage-player"><div id="youtube-container"></div><div class="stage-empty" id="stage-empty"><div class="empty-mic">${icon('mic','big')}</div><h3>The stage is yours</h3><p>Queue a song, hit play, and let the good times roll.</p><button class="btn btn-primary" data-action="focus-search">${icon('plus','small')} Find your first song</button></div><div class="reactions-layer" id="reactions-layer"></div><div class="stage-error" id="stage-error"><span id="stage-error-text">Player needs a click to start.</span><div class="actions"><button data-action="retry-play" id="play-retry" class="btn btn-primary btn-sm">${icon('play','small')} Play</button><button data-action="open-youtube" id="open-youtube" class="btn btn-dark btn-sm" hidden>Open on YouTube</button></div></div></div>
+      ${isHost ? `<section class="panel stage-panel"><div class="stage-player" id="stage-player"><div class="video-surface"><div id="youtube-container"></div><div class="stage-empty" id="stage-empty"><div class="empty-mic">${icon('mic','big')}</div><h3>The stage is yours</h3><p>Queue a song, hit play, and let the good times roll.</p><button class="btn btn-primary" data-action="focus-search">${icon('plus','small')} Find your first song</button></div><div class="stage-error" id="stage-error"><span id="stage-error-text">Player needs a click to start.</span><div class="actions"><button data-action="retry-play" id="play-retry" class="btn btn-primary btn-sm">${icon('play','small')} Play</button><button data-action="open-youtube" id="open-youtube" class="btn btn-dark btn-sm" hidden>Open on YouTube</button></div></div></div><aside class="reactions-rail" id="reactions-layer" aria-hidden="true"><span class="reactions-rail-title">LIVE HYPE</span><span class="reactions-rail-spark" aria-hidden="true">&#10024;</span></aside></div>
         <div class="nowplaying-row"><div id="song-now" class="song-now"></div><div class="host-actions"><button class="btn btn-dark btn-circle" data-action="toggle-play" id="toggle-play" aria-label="Pause or resume" title="Pause or resume">${icon('pause')}</button><button class="btn btn-primary" data-action="play-next" id="play-next">${icon('skip','small')} Next</button><div class="volume">${icon('volume','small')}<input id="volume-control" type="range" min="0" max="100" value="82" aria-label="Volume" /></div><button class="btn btn-dark btn-circle" data-action="fullscreen" title="Fullscreen video" aria-label="Fullscreen video">${icon('expand','small')}</button></div></div></section>` : `<div class="guest-welcome"><span class="guest-icon">${icon('mic','big')}</span><div><h2>It's your turn to DJ.</h2><p>Your song requests appear instantly on the host screen.</p></div></div>`}
       ${searchPanel()}
       ${!isHost ? reactionPanel() : ''}
@@ -334,21 +334,35 @@ function connectToRoom() {
   });
   stream.addEventListener('reaction', event => {
     const reaction = JSON.parse(event.data);
-    if (state.role === 'host') launchEmoji(reaction.type);
+    if (state.role === 'host') launchEmoji(reaction.type, reaction.name);
   });
   stream.addEventListener('expired', () => { stream.close(); toast('This party room has expired.', true); setTimeout(() => location.assign('/'), 1400); });
   stream.addEventListener('error', () => { /* EventSource reconnects itself after network changes. */ });
 }
-function launchEmoji(type) {
+function launchEmoji(type, sender = '') {
   const layer = $('#reactions-layer');
   if (!layer) return;
+  // Restrict the effect to the dedicated rail so reactions never cover the YouTube embed.
+  if (layer.childElementCount > 32) layer.querySelector('.flying-emoji')?.remove();
   const element = document.createElement('span');
   element.className = 'flying-emoji';
-  element.textContent = reactions[type] || reactions.heart;
-  element.style.left = `${10 + Math.random() * 77}%`;
-  element.style.animationDuration = `${2.5 + Math.random() * 1.5}s`;
+  const emoji = document.createElement('span');
+  emoji.className = 'flying-emoji-symbol';
+  emoji.textContent = reactions[type] || reactions.heart;
+  element.appendChild(emoji);
+  if (sender) {
+    const label = document.createElement('small');
+    label.className = 'flying-emoji-sender';
+    label.textContent = String(sender).slice(0, 14);
+    element.appendChild(label);
+  }
+  const delay = 2900 + Math.random() * 1050;
+  element.style.left = `${12 + Math.random() * 24}%`;
+  element.style.animationDuration = `${delay}ms`;
+  element.style.setProperty('--emoji-travel', `${Math.max(layer.clientHeight - 65, 100)}px`);
+  element.style.setProperty('--emoji-drift', `${Math.round((Math.random() - .5) * 15)}px`);
   layer.appendChild(element);
-  setTimeout(() => element.remove(), 4600);
+  setTimeout(() => element.remove(), delay + 250);
 }
 function playerMessage(text, error = false) {
   const bar = $('#stage-error'); if (!bar) return;
@@ -376,7 +390,7 @@ function ensurePlayer() {
     if (!$('#youtube-container') || state.player) return;
     state.player = new YT.Player('youtube-container', {
       width: '100%', height: '100%',
-      playerVars: { autoplay: 0, controls: 1, rel: 0, playsinline: 1, origin: location.origin },
+      playerVars: { autoplay: 0, controls: 0, fs: 0, rel: 0, playsinline: 1, origin: location.origin },
       events: {
         onReady(event) {
           state.playerReady = true;
